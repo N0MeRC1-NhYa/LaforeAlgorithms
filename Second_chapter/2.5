@@ -1,0 +1,133 @@
+class orderedArray{
+    
+    private int[] array;
+    private int arraySize;
+    
+    public orderedArray(int size){
+        array = new int[size];
+        arraySize = 0;
+    }
+    
+    public int find(int searchKey){
+        int leftPointer = 0;
+        int rightPointer = arraySize - 1;
+        int middlePointer;
+        while (true){
+            middlePointer = (rightPointer + leftPointer) / 2;
+            if (array[middlePointer] == searchKey){
+                return middlePointer;
+            }
+            if (leftPointer > rightPointer){
+                return arraySize;
+            }
+            if (array[middlePointer] > searchKey){
+                rightPointer = middlePointer - 1;
+            } else {
+                leftPointer = middlePointer + 1;
+            }
+        }
+    }
+    
+    public void insert(int key){
+        int leftPointer = 0;
+        int rightPointer = arraySize - 1;
+        int middlePointer;
+        while (leftPointer + 1 < rightPointer){
+            middlePointer = (rightPointer + leftPointer) / 2;
+            if (array[middlePointer] == key){
+                rightPointer = middlePointer;
+                break;
+            }
+            if (array[middlePointer] > key){
+                rightPointer = middlePointer - 1;
+            } else {
+                leftPointer = middlePointer + 1;
+            }
+        }
+        int insPos = leftPointer;
+        if (array[insPos] < key && arraySize != 0){
+            insPos++;
+        }
+        if (arraySize + 1 <= array.length){
+            for (int i = arraySize; i > insPos ;i--){
+                array[i] = array[i - 1];
+            }
+            array[insPos] = key;
+            arraySize++;
+        }
+        else {
+            System.out.println("The array is to small\n");
+        }
+    }
+    
+    public boolean delete(int key){
+        int delPos = find(key);
+        if (delPos == arraySize){
+            return false;
+        }
+            for (int i = delPos; i < arraySize - 1; i++){
+                array[i] = array[i + 1];
+            }
+            arraySize--;
+            return true;
+    }
+    
+    public void display(){
+        for (int i = 0; i < arraySize; i++){
+            System.out.print(array[i] + " ");
+        }
+        System.out.println();
+    }
+    
+    public int[] merge(int[] a, int[] b){
+        int resSize = a.length + b.length;
+        int[] res = new int[resSize];
+        int j = 0;
+        int k = 0;
+        for (int i = 0; i < resSize; i++){
+            if (j < a.length && k < b.length){
+                if (a[j] > b[k]){
+                    res[i] = b[k];
+                    k++;
+                } else{
+                    res[i] = a[j];
+                    j++;
+                }
+            } else if (j < a.length){
+                res[i] = a[j];
+                j++;
+            } else {
+                res[i] = b[k];
+                k++;
+            }
+        }
+        return res;
+    }
+}
+public class Main
+{
+	public static void main(String[] args) {
+	    int max = 10;
+		orderedArray Disordered = new orderedArray(max);
+		for (int i = 10 ; i > 0; i--){
+		    Disordered.insert(i);
+		    Disordered.display();
+		}
+		for (int i = 0; i < 12; i++){
+		    if (i % 2 == 0){
+		        System.out.println(Disordered.delete(i));
+		        Disordered.display();
+		    }
+		}
+		System.out.println(Disordered.find(3));
+		System.out.println(Disordered.find(4));
+		System.out.println(Disordered.find(5));
+		int[] firstArr = {1, 5, 7, 12, 23, 45, 90};
+		int[] secondArr = {3, 6, 9, 12};
+		int[] result = Disordered.merge(firstArr, secondArr);
+		for (int i = 0; i < result.length; i++){
+		    System.out.print(result[i] + " ");
+		}
+		System.out.println();
+	}
+}
