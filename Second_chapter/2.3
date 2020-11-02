@@ -1,0 +1,95 @@
+class highArray{
+    
+    private int[] array;
+    private int arraySize;
+    
+    public highArray(int size){
+        array = new int[size];
+        arraySize = 0;
+    }
+    
+    public int find(int searchKey){
+        for (int i = 0; i < arraySize; i++){
+            if (array[i] == searchKey){
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    public void insert(int key){
+        if (arraySize + 1 < array.length){
+            array[arraySize] = key;
+            arraySize++;
+        }
+        else {
+            System.out.println("The array size is to small");
+        }
+    }
+    
+    public boolean delete(int key){
+        int delPos = find(key);
+        if (delPos != -1){
+            for (int i = delPos; i < arraySize - 1; i++){
+                array[i] = array[i + 1];
+            }
+            arraySize--;
+            return true;
+        } else{
+            return false;
+        }
+    }
+    
+    public void display(){
+        for (int i = 0; i < arraySize; i++){
+            System.out.print(array[i] + " ");
+        }
+        System.out.println();
+    }
+    
+    public int removeMax(){
+        int max = -1;
+        for (int i = 0; i < arraySize; i++){
+            if (max < array[i]){
+                max = array[i];
+            }
+        }
+        delete(max);
+        return max;
+    }
+    
+    public void sort(){
+        int[] sortedArray = new int[arraySize];
+        int currSize = arraySize;
+        for (int i = currSize - 1; i >= 0; i--){
+            sortedArray[i] = removeMax();
+        }
+        for (int i = 0; i < currSize; i++){
+            insert(sortedArray[i]);
+        }
+    }
+}
+public class Main
+{
+	public static void main(String[] args) {
+	    int max = 100;
+		highArray Disordered = new highArray(max);
+		for (int i = 15 ; i > 5; i--){
+		    Disordered.insert(i);
+		    Disordered.display();
+		}
+		for (int i = 0; i < 12; i++){
+		    if (i % 2 == 0){
+		        System.out.println(Disordered.delete(i));
+		        Disordered.display();
+		    }
+		}
+		System.out.println(Disordered.find(3));
+		System.out.println(Disordered.find(4));
+		System.out.println(Disordered.find(5));
+		Disordered.removeMax();
+		Disordered.display();
+		Disordered.sort();
+		Disordered.display();
+	}
+}
